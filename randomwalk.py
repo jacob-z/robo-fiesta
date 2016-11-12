@@ -9,12 +9,14 @@ import sys
 import random
 from vehicle import Vehicle
 from time import sleep
+from motor import Motor
 
 '''
 Turns the vehicle left
 '''
 def turn_left(vehicle):
     vehicle.left_motor.stop()
+    vehicle.left_motor.start(direction=Motor.BACKWARD)
     if not vehicle.right_motor.is_started():
         vehicle.right_motor.start()
     sleep(2)
@@ -25,6 +27,7 @@ Turns the vehicle right
 '''
 def turn_right(vehicle):
     vehicle.right_motor.stop()
+    vehicle.right_motor.start(direction=Motor.BACKWARD)
     if not vehicle.left_motor.is_started():
         vehicle.left_motor.start()
     sleep(2)
@@ -36,8 +39,8 @@ Moves the vehicle forward
 def move_forward(vehicle):
     motors = [vehicle.left_motor, vehicle.right_motor]
     for motor in motors:
-        if not motor.is_started():
-            motor.start()
+        motor.stop()
+        motor.start()
 
 
 '''

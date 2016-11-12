@@ -16,9 +16,9 @@ class Motor:
 	FORWARD = True
 	BACKWARD = False
 	
-	# Public constants
-	_DC_BACKWARD = 99
-	_DC_FORWARD = 6
+	# Private constants
+	_DC_BACKWARD = 6.1
+	_DC_FORWARD = 10
 	
 	'''
 	Creates a new instance of a Motor object
@@ -33,7 +33,7 @@ class Motor:
 		self._is_started = False
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(channel_out, GPIO.OUT)
-		self._pwm = GPIO.PWM(channel_out, 100)
+		self._pwm = GPIO.PWM(channel_out, 50)
 		
 	
 	'''
@@ -85,7 +85,7 @@ class Motor:
 	Stops spinning the motor
 	'''
 	def stop(self):
-		self._pwm.stop()
+		self._pwm.ChangeDutyCycle(0)
 		self._is_started = False
 		
 	
