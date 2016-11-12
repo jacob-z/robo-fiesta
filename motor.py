@@ -8,7 +8,6 @@ hardware and provides a simple interface for clients to use.
 
 from Tkinter import *
 import RPi.GPIO as GPIO
-import threading
 import time
 
 class Motor:
@@ -35,7 +34,6 @@ class Motor:
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(channel_out, GPIO.OUT)
 		self._pwm = GPIO.PWM(channel_out, 100)
-		self._pwm.start(0)
 		
 	
 	'''
@@ -59,24 +57,6 @@ class Motor:
 			
 	
 	'''
-	Helper method for start()
-	
-	Contains main loop for motor rotation
-	'''
-	def _rotate(self, speed, direction):
-		while self._is_started:
-			if direction == Motor.FORWARD:
-				if self._flipped:
-					self._rotate_backward(speed)
-				else:
-					self._rotate_forward(speed)
-			else:
-				if self._flipped:
-					self._rotate_forward(speed)
-				else:
-					self._rotate_backward(speed)
-	
-	'''
 	Spins motor at an optionally specified (relative) speed
 	
 	Args:
@@ -87,16 +67,25 @@ class Motor:
 		if self._is_started:
 			raise Exception('Motor already started. Must check with is_started() before calling start()')
 		
+		self._pwm.start(0)
 		self._is_started = True
-		task = self._rotate
-		t = threading.Thread(target=task, args=(speed, direction))
-		t.start()
+		if direction == Motor.FORWARD:
+			if self._flipped:
+				self._rotate_backward(speed)
+			else:
+				self._rotate_forward(speed)
+		else:
+			if self._flipped:
+				self._rotate_forward(speed)
+			else:
+				self._rotate_backward(speed)
 
 
 	'''
 	Stops spinning the motor
 	'''
 	def stop(self):
+		self._pwm.stop()
 		self._is_started = False
 		
 	
