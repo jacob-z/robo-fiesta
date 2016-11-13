@@ -10,7 +10,7 @@ from decimal import Decimal
 
 class Pitch:
     
-    PITCHES = { 'A': 0, 'B': 2, 'C': 3, 'D': 5, 'E': 7, 'F': 8, 'G': 10 }
+    PITCHES = { 'A': 0, 'B': 2, 'C': 3, 'D': 5, 'E': 7, 'F': 8, 'G': 10, 'R': -1 }
     ACCIDENTALS = { '#': +1, 'b': -1, '?': 0 }
     
     def __init__(self, pitch, accidental, octave):
@@ -25,4 +25,7 @@ class Pitch:
     '''
     def freq(self):
         freq_A2 = Decimal(110.0)
-        return freq_A2 * Decimal(2**((Decimal(self._pitch + self._accidental + (12.0 * self._octave))) / Decimal(12.0)))
+        if self._pitch != Pitch.PITCHES['R']:
+            return freq_A2 * Decimal(2**((Decimal(self._pitch + self._accidental + (12.0 * self._octave))) / Decimal(12.0)))
+        else:
+            return -1
