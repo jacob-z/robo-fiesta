@@ -9,6 +9,7 @@ components and manage their connections on the Pi.
 from Tkinter import *
 import RPi.GPIO as GPIO
 from motor import Motor
+from buzzer import Buzzer
 from time import sleep
 
 class Vehicle:
@@ -28,10 +29,10 @@ class Vehicle:
     Initializes a vehicle, given the channel for the left/right motors
     and the photo resistor
     '''
-    def __init__(self, channel_left, channel_right, channel_photo_resistor):
+    def __init__(self, channel_left, channel_right, channel_buzzer):
         self._left_motor = Motor(channel_left)
         self._right_motor = Motor(channel_right, flipped=True)
-        self._photo_resistor = None # TODO: Implement PhotoResistor
+        self._buzzer = Buzzer(channel_buzzer)
         self._status = Vehicle._IS_NOT_MOVING
         
     #-------------------------------------------------------------------
@@ -47,8 +48,8 @@ class Vehicle:
         return self._right_motor
 
     @property
-    def photo_resistor(self):
-        return self._photo_resistor
+    def buzzer(self):
+        return self._buzzer
     
     
     #-------------------------------------------------------------------
@@ -114,8 +115,7 @@ class Vehicle:
         motors = [self._left_motor, self._right_motor]
         for motor in motors:
             motor.stop()
-    
-    
+            
     #-------------------------------------------------------------------
     # Cleanup
     #-------------------------------------------------------------------
