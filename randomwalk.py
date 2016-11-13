@@ -54,14 +54,15 @@ class RandomWalk:
         while self._moving:
             # Take a random step 
             move = random.randint(0, 7)
-            song = random.randint(0, 3)
+            song = random.randint(0, 7)
             range_turn_left = range(0, 3)
             range_turn_right= range(3, 6)
             range_move = range(6, 8)
-            song_filenames = { 0: 'ghostbusters.txt', 1: 'a_unlocked.txt', 2:
-                'coin.txt', 3: 'starwars.txt' }
-            print 'Move:', move
-            print 'Song:', song_filenames[song]
+            range_ghostbusters = range(0, 2)
+            range_a_unlocked = range(2, 4)
+            range_coin = range(4, 6)
+            range_starwars = range(6, 7)
+            range_callmemaybe = range(7, 8)
             if move in range_turn_left:
                 vehicle.turn(Vehicle.LEFT)
             elif move in range_turn_right:
@@ -70,7 +71,16 @@ class RandomWalk:
                 vehicle.move(Vehicle.FORWARD)
             
             if not vehicle.buzzer.is_playing:
-                vehicle.buzzer.play_song(song_filenames[song])
+                if song in range_ghostbusters:
+                    vehicle.buzzer.play_song('ghostbusters.txt')
+                elif song in range_a_unlocked:
+                    vehicle.buzzer.play_song('a_unlocked.txt')
+                elif song in range_coin:
+                    vehicle.buzzer.play_song('coin.txt')
+                elif song in range_starwars:
+                    vehicle.buzzer.play_song('starwars.txt')
+                else:
+                    vehicle.buzzer.play_song('callmemaybe.txt')
             else:
                 sleep(1)
             
