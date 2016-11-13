@@ -13,6 +13,6 @@ from pitch import Pitch
 
 vehicle = Vehicle(24, 18, 2)
 vehicle.buzzer.play_song(sys.argv[1])
-while vehicle.buzzer.is_playing():
+while vehicle.buzzer.is_playing:
     pass
 vehicle.destroy()

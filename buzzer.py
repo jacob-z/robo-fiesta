@@ -10,6 +10,7 @@ from Tkinter import *
 import RPi.GPIO as GPIO
 from time import sleep
 from pitch import Pitch
+import threading
 
 class Buzzer:
     
@@ -78,8 +79,8 @@ class Buzzer:
     '''
     def play_song(self, filename):
         self._is_playing = True
-        self._play(filename)
-        
+#        threading.Thread(target=self._play, args=(filename,)).start()
+        self._play(filename)        
     
     '''
     Force stops the song
@@ -91,5 +92,6 @@ class Buzzer:
     '''
     Returns True if the buzzer is playing a song, False if not
     '''
+    @property
     def is_playing(self):
         return self._is_playing

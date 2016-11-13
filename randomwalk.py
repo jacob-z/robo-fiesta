@@ -21,11 +21,17 @@ class RandomWalk:
     Args:
         song_filename: string path to filename containing song to play
     '''
-    def __init__(self, song_filename):
-        self._song_filename = song_filename
+    def __init__(self):
         self._moving = False
         self._vehicle = Vehicle(24, 18, 2)
     
+    '''
+    Getter for vehicle
+    '''
+    @property
+    def vehicle(self):
+        return self._vehicle
+
     '''
     Plays the vehicle's song
     '''
@@ -41,26 +47,32 @@ class RandomWalk:
         vehicle = Vehicle(channel_left_motor, channel_right_motor, channel_buzzer)
         
         # Play song
-        vehicle.buzzer.play_song(self._song_filename)
+        vehicle.buzzer.play_song('ghostbusters.txt')
         
         # Main loop
         self._moving = True
         while self._moving:
             # Take a random step 
-            r = random.randint(0, 6)
-            print r
-            if r in [0, 1]:
+            move = random.randint(0, 7)
+            song = random.randint(0, 3)
+            range_turn_left = range(0, 3)
+            range_turn_right= range(3, 6)
+            range_move = range(6, 8)
+            song_filenames = { 0: 'ghostbusters.txt', 1: 'a_unlocked.txt', 2:
+                'coin.txt', 3: 'starwars.txt' }
+            print 'Move:', move
+            print 'Song:', song_filenames[song]
+            if move in range_turn_left:
                 vehicle.turn(Vehicle.LEFT)
-                vehicle.move(Vehicle.FORWARD)
-            elif r in [2, 3]:
+            elif move in range_turn_right:
                 vehicle.turn(Vehicle.RIGHT)
-                vehicle.move(Vehicle.FORWARD)
-            elif r in [4, 5]:
-                vehicle.move(Vehicle.FORWARD)
             else:
-                vehicle.buzzer.play_song(self._song_filename)
-            sleep(2)
-
+                vehicle.move(Vehicle.FORWARD)
+            
+            if not vehicle.buzzer.is_playing:
+                vehicle.buzzer.play_song(song_filenames[song])
+            else:
+                sleep(1)
             
         # Loop ends when stop() is called
         vehicle.stop()
@@ -87,13 +99,20 @@ Executes random walk
 Args:
     song_filename: filename
 '''
-def main(song_filename):
-    rw = RandomWalk(song_filename)
+def main():
+    rw = RandomWalk()
     rw.start()
-    raw_input('Press enter to end walk\n')
+    msg = 'Command? (l/r/x)\n'
+    cmd = raw_input(msg)
+    while (cmd != 'x'):
+        if cmd == 'l':
+            rw.vehicle.turn(Vehicle.LEFT)
+        elif cmd == 'r':
+            rw.vehicle.turn(Vehicle.RIGHT)
+        cmd = raw_input(msg)
     rw.stop()
             
     
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main()
     
