@@ -11,37 +11,6 @@ from vehicle import Vehicle
 from time import sleep
 from motor import Motor
 
-'''
-Turns the vehicle left
-'''
-def turn_left(vehicle):
-    vehicle.left_motor.stop()
-    vehicle.left_motor.start(direction=Motor.BACKWARD)
-    if not vehicle.right_motor.is_started():
-        vehicle.right_motor.start()
-    sleep(2)
-   
-    
-'''
-Turns the vehicle right
-'''
-def turn_right(vehicle):
-    vehicle.right_motor.stop()
-    vehicle.right_motor.start(direction=Motor.BACKWARD)
-    if not vehicle.left_motor.is_started():
-        vehicle.left_motor.start()
-    sleep(2)
-    
-
-'''
-Moves the vehicle forward
-'''
-def move_forward(vehicle):
-    motors = [vehicle.left_motor, vehicle.right_motor]
-    for motor in motors:
-        motor.stop()
-        motor.start()
-
 
 '''
 Executes random walk
@@ -63,16 +32,15 @@ def main(T):
         r = random.randint(0, 2)
         print r
         if r == 0:
-            turn_left(vehicle)
+            vehicle.turn(Vehicle.LEFT)
         elif r == 1:
-            turn_right(vehicle)
+            vehicle.turn(Vehicle.RIGHT)
             
-        move_forward(vehicle)
+        vehicle.move(Vehicle.FORWARD)
         sleep(2)
         t += 1
         
-    for motor in motors:
-        motor.stop()
+    vehicle.stop()
     vehicle.destroy()
             
     
